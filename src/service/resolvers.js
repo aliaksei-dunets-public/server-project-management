@@ -77,10 +77,10 @@ module.exports = {
 
             const factory = dataSources.factory;
 
-            if (deleteChild) {
-                await factory.getInstance(MODELS.timelog).deleteByRootId(id);
-                await factory.getInstance(MODELS.issue).deleteByParentId(id);
-            }
+            // if (deleteChild) {
+            await factory.getInstance(MODELS.timelog).deleteByRootId(id);
+            await factory.getInstance(MODELS.issue).deleteByParentId(id);
+            // }
             return factory.getInstance(MODELS.project).deleteOne(id);
         },
         // Issue
@@ -199,13 +199,13 @@ module.exports = {
     },
 
     // Types
-    ProjectDetail: {
+    Project: {
         issues: (root, params, { dataSources }) => {
-            if (!root.id) throw new Error(`Error during ProjectDetail-issues query`);
+            if (!root.id) throw new Error(`Error during Project-issues query`);
             return dataSources.factory.getInstance(MODELS.issue).getAllByParent(root.id);
         },
     },
-    IssueDetail: {
+    Issue: {
         timelogs: (root, params, { dataSources }) => {
             if (!root.id) throw new Error(`Error during IssueDetail-timelogs query`);
             return dataSources.factory.getInstance(MODELS.timelog).getAllByParent(root.id);

@@ -3,7 +3,7 @@ require('dotenv').config();
 module.exports = {
     development: {
         database: {
-            dsn: process.env.DEV_DB_DSN
+            dsn: 'mongodb://localhost:27017/dev-project-management'
         },
         PORT: process.env.PORT || '3005',
     },

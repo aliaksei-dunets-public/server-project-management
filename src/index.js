@@ -12,6 +12,8 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     dataSources: () => ({ factory: new ControllerFactory() }),
+    introspection: true,
+    playground: true,
     // plugins: [plugins],
 });
 

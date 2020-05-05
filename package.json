@@ -4,8 +4,8 @@
   "description": "Server part - graphql node.js mongoose",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "test": "mocha",
+    "start": "nodemon src/index.js"
   },
   "author": "Aliaksei Dunets",
   "license": "ISC",

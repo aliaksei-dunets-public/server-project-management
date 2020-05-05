@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { createTestClient } = require('apollo-server-testing');
 const assert = require('assert');
 const { ApolloServer } = require('apollo-server');

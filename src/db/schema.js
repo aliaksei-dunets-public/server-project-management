@@ -17,6 +17,7 @@ const issueSchema = new Schema({
     descr: { type: String },
     status: { type: String, default: 'NEW' },               // NEW, PROGRESS, CLOSED
     external_code: { type: String },
+    external_url: { type: String },
 }, { timestamps: true });
 
 const timelogSchema = new Schema({
@@ -26,6 +27,21 @@ const timelogSchema = new Schema({
     valueLog: { type: Number },
     descr: { type: String },
 }, { timestamps: true });
+
+issueSchema.pre('save', async function (next) {
+    try {
+        if (this.isNew) {
+            const project = await ProjectModel.findById(this.project_id);
+            if (project) {
+                this.code = project.code;
+                this.external_url = project.external_url;
+            }
+        }
+        next();
+    } catch (error) {
+        // TO DO error
+    }
+});
 
 
 // // https://dou.ua/lenta/articles/quick-estimates/
@@ -95,7 +111,7 @@ function calculateTotal(value = 0, risk = 0) {
 
 taskSchema.pre('save', async function () {
     try {
-        const self = this;
+        // const self = this;
 
         // Only Creation
         // if (this.isNew) {
@@ -133,9 +149,17 @@ taskSchema.pre('save', async function () {
 //     item.deviation = standardDeviation(item.best, item.worst);
 // });
 
+const ProjectModel = mongoose.model('Project', projectSchema);
+const IssueModel = mongoose.model('Issue', issueSchema);
+// const TimelogModel = mongoose.model('Timelog', timelogSchema);
+// const ProjectionModel = mongoose.model('Projection', projectionSchema);
+// const VersionModel = mongoose.model('Version', versionSchema);
+// const StoryModel = mongoose.model('Story', storySchema);
+// const TaskModel = mongoose.model('Task', taskSchema);
+
 module.exports = {
-    ProjectModel: mongoose.model('Project', projectSchema),
-    IssueModel: mongoose.model('Issue', issueSchema),
+    ProjectModel, //: mongoose.model('Project', projectSchema),
+    IssueModel, //: mongoose.model('Issue', issueSchema),
     TimelogModel: mongoose.model('Timelog', timelogSchema),
     ProjectionModel: mongoose.model('Projection', projectionSchema),
     VersionModel: mongoose.model('Version', versionSchema),

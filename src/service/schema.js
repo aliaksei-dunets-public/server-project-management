@@ -61,18 +61,6 @@ const typeDefs = gql`
         external_url: String
         createdAt: DateTime
         updatedAt: DateTime
-    }
-
-    type ProjectDetail {
-        id: ID
-        code: String
-        name: String
-        descr: String
-        status: ProjectStatus
-        external_code: String
-        external_url: String
-        createdAt: DateTime
-        updatedAt: DateTime
         issues: [Issue]
     }
 
@@ -84,18 +72,7 @@ const typeDefs = gql`
         descr: String
         status: IssueStatus
         external_code: String
-        createdAt: DateTime
-        updatedAt: DateTime
-    }
-
-    type IssueDetail {
-        id: ID
-        project_id: ID
-        code: String
-        summary: String
-        descr: String
-        status: IssueStatus
-        external_code: String
+        external_url: String
         createdAt: DateTime
         updatedAt: DateTime
         timelogs: [Timelog]
@@ -240,6 +217,7 @@ const typeDefs = gql`
         descr: String
         status: IssueStatus
         external_code: String
+        external_url: String
     }
 
     input IssueEdit {
@@ -249,6 +227,7 @@ const typeDefs = gql`
         descr: String
         status: IssueStatus
         external_code: String
+        external_url: String
     }
 
     input TimelogCreate {
@@ -344,10 +323,10 @@ const typeDefs = gql`
     type Query {
         statuses(model: Model!): [ValueHelp]
 
-        project(id: ID!): ProjectDetail
+        project(id: ID!): Project
         projects(status: ProjectStatus): [Project]
 
-        issue(id: ID!): IssueDetail
+        issue(id: ID!): Issue
         issues(status: IssueStatus, project_id: String): [Issue]
         
         timelog(id: ID!): Timelog
