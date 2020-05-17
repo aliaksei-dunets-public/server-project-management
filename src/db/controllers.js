@@ -182,7 +182,8 @@ class ControllerBase {
         try {
             Object.keys(body).forEach((key) => {
 
-                if (instance[key] instanceof Object) {
+                // Check deep Objects and exclude Date type fields
+                if (instance[key] instanceof Object && !instance[key].getTime) {
                     Object.keys(body[key]).forEach((deep_key) => {
                         if (deep_key in body[key] && body[key][deep_key] !== undefined) {
                             instance[key][deep_key] = body[key][deep_key];
@@ -256,12 +257,12 @@ class ControllerTimelog extends ControllerBase {
 
     _parseStartDate(date) {
         const valueDate = date ? moment(date, 'YYYY-MM-DD', true) : moment().startOf('isoWeek');
-        return valueDate.startOf('day').toISOString();
+        return valueDate.startOf('day');
     }
 
     _parseEndDate(date) {
         const valueDate = date ? moment(date, 'YYYY-MM-DD', true) : moment().endOf('isoWeek');
-        return valueDate.endOf('day').toISOString();
+        return valueDate.endOf('day');
     }
 
     _whereOptions(query) {

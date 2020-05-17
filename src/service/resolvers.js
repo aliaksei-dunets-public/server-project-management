@@ -1,4 +1,4 @@
-const { MODELS } = require('../db/controllers');
+const { FIELDS, MODELS } = require('../db/controllers');
 
 module.exports = {
     // Queries
@@ -26,6 +26,35 @@ module.exports = {
         },
         timelogs: (root, params, { dataSources }) => {
             return dataSources.factory.getInstance(MODELS.timelog).getAll(params);
+        },
+        // Timesheet
+        timesheet: async (root, params, { dataSources }) => {
+
+            let projects = [],
+                issues = [],
+                timelogs = [];
+
+            const factory = dataSources.factory;
+            const instanceTimelog = factory.getInstance(MODELS.timelog);
+            timelogs = await instanceTimelog.getAll(params);
+
+            if (!timelogs) return {};
+
+            const issueUniqIds = instanceTimelog.getUniqIds(FIELDS.issue_id, timelogs);
+            if (issueUniqIds) {
+                issues = await factory.getInstance(MODELS.issue).getByArrayIds(issueUniqIds);
+            }
+
+            const projectUniqIds = instanceTimelog.getUniqIds(FIELDS.project_id, timelogs);
+            if (projectUniqIds) {
+                projects = await factory.getInstance(MODELS.project).getByArrayIds(projectUniqIds);
+            }
+
+            return {
+                projects,
+                issues,
+                timelogs
+            };
         },
         // Projection
         projection: (root, { id }, { dataSources }) => {
