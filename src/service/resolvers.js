@@ -8,7 +8,7 @@ module.exports = {
             if (!id) throw new Error(`Error during project query`);
             return dataSources.factory.getInstance(MODELS.project).getById(id);
         },
-        projects: (root, params, { dataSources }) => {
+        projects: (root, params, { dataSources, user }) => {
             return dataSources.factory.getInstance(MODELS.project).getAll(params);
         },
         // Issue
@@ -92,6 +92,12 @@ module.exports = {
 
     // Mutation
     Mutation: {
+        //login
+        login: (root, { email, password }, { dataSources }) => {
+            if (!email || !password) throw new Error(`Error during login mutation`);
+            return dataSources.factory.getInstance(MODELS.user).getOrCreateUser(email, password);
+        },
+
         // Project
         createProject: (root, { input }, { dataSources }) => {
             if (!input) throw new Error(`Error during createProject mutation`);

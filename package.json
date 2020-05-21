@@ -12,6 +12,7 @@
   "dependencies": {
     "apollo-server": "^2.11.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
     "graphql-fields": "^2.0.3",

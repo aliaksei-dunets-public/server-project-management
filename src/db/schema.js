@@ -1,5 +1,22 @@
+const crypto = require('crypto');
 const mongoose = require('../libs/mongoose');
 const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    hashedPassword: {
+        type: String,
+        required: true
+    },
+    salt: {
+        type: String,
+        required: true
+    }
+}, { timestamps: true });
 
 const projectSchema = new Schema({
     code: { type: String, unique: true, required: true, uppercase: true },
@@ -27,6 +44,22 @@ const timelogSchema = new Schema({
     valueLog: { type: Number },
     descr: { type: String },
 }, { timestamps: true });
+
+userSchema.methods.encryptPassword = function (password) {
+    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+}
+
+userSchema.virtual('password')
+    .set(function (password) {
+        this._plainPassword = password;
+        this.salt = Math.random() + '';
+        this.hashedPassword = this.encryptPassword(password);
+    })
+    .get(function () { return this._plainPassword });
+
+userSchema.methods.checkPassword = function (password) {
+    return this.encryptPassword(password) === this.hashedPassword;
+}
 
 issueSchema.pre('save', async function (next) {
     try {
@@ -158,6 +191,7 @@ const IssueModel = mongoose.model('Issue', issueSchema);
 // const TaskModel = mongoose.model('Task', taskSchema);
 
 module.exports = {
+    UserModel: mongoose.model('User', userSchema),
     ProjectModel, //: mongoose.model('Project', projectSchema),
     IssueModel, //: mongoose.model('Issue', issueSchema),
     TimelogModel: mongoose.model('Timelog', timelogSchema),

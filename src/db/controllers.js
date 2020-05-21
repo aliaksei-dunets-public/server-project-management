@@ -2,6 +2,7 @@ const moment = require('moment');
 const db = require('./schema');
 
 const MODELS = {
+    user: 'User',
     project: 'Project',
     issue: 'Issue',
     timelog: 'Timelog',
@@ -42,6 +43,9 @@ class ControllerFactory {
         let controller;
 
         switch (modelName) {
+            case MODELS.user:
+                controller = new ControllerUser();
+                break;
             case MODELS.project:
                 controller = new ControllerProject();
                 break;
@@ -229,6 +233,37 @@ class ControllerBase {
             console.error(`Error during deleteByRootId - ${error}`);
             return null;
         }
+    }
+}
+
+class ControllerUser extends ControllerBase {
+    constructor() {
+        super(db.UserModel);
+    }
+
+    async checkToken(auth) {
+        if(!auth) return null;
+        const token = Buffer.from(auth, 'base64').toString('ascii');
+        const data = token.split('__&&__');
+        let user = await this.getOne({ email: data[0] });
+        if (user && user.hashedPassword === data[1]) {
+            return user
+        } else return null;
+    }
+
+    async getOrCreateUser(email, password) {
+        let user = await this.getOne({ email });
+        // User doesn't exist into DB -> create a new user
+        if (!user) {
+            // user = await this.createOne({ email, password });
+            return null;
+        } else {
+            // Check Password of exist user
+            if (!user.checkPassword(password)) return null;
+        }
+        const hash = user.email + '__&&__' + user.hashedPassword;
+
+        return Buffer.from(hash).toString('base64');
     }
 }
 
