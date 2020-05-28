@@ -206,11 +206,7 @@ class ControllerBase {
 
     async deleteOne(id) {
         try {
-            const instance = await this.getById(id);
-            if (!instance) throw new Error('Could not find the requested entry');
-
-            await this.model.deleteOne({ [FIELDS.id]: id });
-            return instance;
+            return await this.model.findOneAndDelete({ [FIELDS.id]: id });
         } catch (error) {
             console.error(`Error during deleteOne - ${error}`);
             return null;
@@ -242,7 +238,7 @@ class ControllerUser extends ControllerBase {
     }
 
     async checkToken(auth) {
-        if(!auth) return null;
+        if (!auth) return null;
         const token = Buffer.from(auth, 'base64').toString('ascii');
         const data = token.split('__&&__');
         let user = await this.getOne({ email: data[0] });

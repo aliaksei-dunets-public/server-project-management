@@ -358,6 +358,7 @@ const typeDefs = gql`
         deleteIssue(id:ID!, deleteChild:Boolean): Issue
 
         createTimelog(input:TimelogCreate): Timelog
+        createMultiTimelogs(input:[TimelogCreate]): [Timelog]
         updateTimelog(id:ID!, input:TimelogEdit): Timelog
         deleteTimelog(id:ID!): Timelog
 

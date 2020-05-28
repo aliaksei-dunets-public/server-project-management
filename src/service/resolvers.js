@@ -112,10 +112,10 @@ module.exports = {
 
             const factory = dataSources.factory;
 
-            // if (deleteChild) {
-            await factory.getInstance(MODELS.timelog).deleteByRootId(id);
-            await factory.getInstance(MODELS.issue).deleteByParentId(id);
-            // }
+            if (deleteChild) {
+                await factory.getInstance(MODELS.timelog).deleteByRootId(id);
+                await factory.getInstance(MODELS.issue).deleteByParentId(id);
+            }
             return factory.getInstance(MODELS.project).deleteOne(id);
         },
         // Issue
@@ -142,6 +142,10 @@ module.exports = {
         createTimelog: (root, { input }, { dataSources }) => {
             if (!input) throw new Error(`Error during createTimelog mutation`);
             return dataSources.factory.getInstance(MODELS.timelog).createOne(input);
+        },
+        createMultiTimelogs: (root, { input }, { dataSources }) => {
+            if (!input) throw new Error(`Error during createMultyTimelog mutation`);
+            return dataSources.factory.getInstance(MODELS.timelog).createMany(input);
         },
         updateTimelog: (root, { id, input }, { dataSources }) => {
             if (!id || !input) throw new Error(`Error during updateTimelog mutation`);

@@ -116,6 +116,47 @@ describe('Test Service - Time Tracking Project Functionality', () => {
 
             testTimelog = createTimelog;
         });
+
+        it('Create Multi Timelogs', async () => {
+
+            const { data: { createMultiTimelogs } } = await mutate({
+                mutation: `
+                    mutation createMultiTimelogs($input:[TimelogCreate]) {
+                        createMultiTimelogs(input:$input) {
+                            id
+                            project_id
+                            issue_id
+                            valueLog
+                            descr
+                        }
+                    }`,
+                variables: {
+                    input: [
+                        {
+                            project_id: testProject.id,
+                            issue_id: testIssue.id,
+                            valueLog: 10,
+                            descr: "Timelog Description Unit Test",
+                        },
+                        {
+                            project_id: testProject.id,
+                            issue_id: testIssue.id,
+                            valueLog: 20,
+                            descr: "Timelog Description Unit Test",
+                        },
+                        {
+                            project_id: testProject.id,
+                            issue_id: testIssue.id,
+                            valueLog: 30,
+                            descr: "Timelog Description Unit Test",
+                        }
+                    ]
+                }
+            });
+
+            assert.ok(createMultiTimelogs, `Error during creation of a new Multi Timelogs`);
+            assert.equal(createMultiTimelogs.length, 3, `Timelogs array result error`);
+        });
     });
 
     describe('Query - Multy Read', () => {
@@ -299,20 +340,20 @@ describe('Test Service - Time Tracking Project Functionality', () => {
 
     describe('Mutation - delete', () => {
 
-        it('Delete the Project', async () => {
+        it('Delete the Timelog', async () => {
 
-            const { data: { deleteProject } } = await mutate({
+            const { data: { deleteTimelog } } = await mutate({
                 mutation: `
-                    mutation deleteProject($id:ID!) {
-                        deleteProject(id:$id) {
-                            code
+                    mutation deleteTimelog($id:ID!) {
+                        deleteTimelog(id:$id) {
+                            id
                         }
                     }
                 `,
-                variables: { id: testProject.id }
+                variables: { id: testTimelog.id }
             });
 
-            assert.ok(deleteProject, `Error during delete of the Project`);
+            assert.ok(deleteTimelog, `Error during delete of the Timelog`);
         });
 
         it('Delete the Issue', async () => {
@@ -331,20 +372,20 @@ describe('Test Service - Time Tracking Project Functionality', () => {
             assert.ok(deleteIssue, `Error during delete of the Issue`);
         });
 
-        it('Delete the Timelog', async () => {
+        it('Delete the Project', async () => {
 
-            const { data: { deleteTimelog } } = await mutate({
+            const { data: { deleteProject } } = await mutate({
                 mutation: `
-                    mutation deleteTimelog($id:ID!) {
-                        deleteTimelog(id:$id) {
-                            id
+                    mutation deleteProject($id:ID!,$deleteChild:Boolean) {
+                        deleteProject(id:$id,deleteChild:$deleteChild) {
+                            code
                         }
                     }
                 `,
-                variables: { id: testTimelog.id }
+                variables: { id: testProject.id, deleteChild: true }
             });
 
-            assert.ok(deleteTimelog, `Error during delete of the Timelog`);
+            assert.ok(deleteProject, `Error during delete of the Project`);
         });
 
     });
