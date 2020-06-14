@@ -35,7 +35,6 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
         it('Create a Issue', async () => {
             const body = {
                 project_id: project._id,
-                //code: project.code,
                 summary: 'Test Issue 001',
                 descr: 'My Test Issue 001',
                 external_code: 'TST001',
