@@ -45,7 +45,7 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
             issue = await issueController.createOne(body);
 
             assert.ok(issue, `Error during creation of a new Issue`);
-            assert.equal(issue.external_code, 'TST001', `Issue external code error`);
+            assert.equal(issue.code, 'TST01-1', `Issue code error`);
         });
 
         it('Create a Timelog', async () => {

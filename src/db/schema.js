@@ -1,6 +1,14 @@
 const crypto = require('crypto');
 const mongoose = require('../libs/mongoose');
+// const autoIncrement = require('mongoose-auto-increment');
+// const util = require('util');
+
+const ProjectModel = require('./schema/project');
+const NumberRangeModel = require('./schema/numberRange');
+
 const Schema = mongoose.Schema;
+
+// autoIncrement.initialize(mongoose.connection);
 
 const userSchema = new Schema({
     email: {
@@ -18,18 +26,19 @@ const userSchema = new Schema({
     }
 }, { timestamps: true });
 
-const projectSchema = new Schema({
-    code: { type: String, unique: true, required: true, uppercase: true },
-    name: { type: String, required: true },
-    descr: { type: String },
-    status: { type: String, default: 'INACTIVE' },          // ACTIVE, INACTIVE, OBSOLETE
-    external_code: { type: String },
-    external_url: { type: String },
-}, { timestamps: true });
+// const projectSchema = new Schema({
+//     code: { type: String, unique: true, required: true, uppercase: true },
+//     name: { type: String, required: true },
+//     descr: { type: String },
+//     status: { type: String, default: 'INACTIVE' },          // ACTIVE, INACTIVE, OBSOLETE
+//     external_code: { type: String },
+//     external_url: { type: String },
+// }, { timestamps: true });
 
 const issueSchema = new Schema({
     project_id: { type: String, required: true, index: true },
     code: { type: String, uppercase: true },
+    codeId: { type: Number },
     summary: { type: String, required: true },
     descr: { type: String },
     status: { type: String, default: 'NEW' },               // NEW, PROGRESS, CLOSED
@@ -45,6 +54,7 @@ const timelogSchema = new Schema({
     descr: { type: String },
 }, { timestamps: true });
 
+// Schema DB Logic
 userSchema.methods.encryptPassword = function (password) {
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 }
@@ -66,7 +76,11 @@ issueSchema.pre('save', async function (next) {
         if (this.isNew) {
             const project = await ProjectModel.findById(this.project_id);
             if (project) {
-                this.code = project.code;
+
+                const count = await NumberRangeModel.nextNumber(this.project_id);
+
+                // const count = await util.promisify(this.nextCount)();
+                this.code = `${project.code}-${count}`;
                 this.external_url = project.external_url;
             }
         }
@@ -76,6 +90,7 @@ issueSchema.pre('save', async function (next) {
     }
 });
 
+// Projection Block
 
 // // https://dou.ua/lenta/articles/quick-estimates/
 // const estimationSchema = new Schema({
@@ -182,7 +197,12 @@ taskSchema.pre('save', async function () {
 //     item.deviation = standardDeviation(item.best, item.worst);
 // });
 
-const ProjectModel = mongoose.model('Project', projectSchema);
+// const ProjectModel = mongoose.model('Project', projectSchema);
+
+// issueSchema.plugin(autoIncrement.plugin, {
+//     model: 'Issue',
+//     field: 'codeId'
+// });
 const IssueModel = mongoose.model('Issue', issueSchema);
 // const TimelogModel = mongoose.model('Timelog', timelogSchema);
 // const ProjectionModel = mongoose.model('Projection', projectionSchema);
