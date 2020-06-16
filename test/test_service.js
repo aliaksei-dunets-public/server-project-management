@@ -295,6 +295,7 @@ describe('Test Service - Time Tracking Project Functionality', () => {
                         updateIssue(id: $id, input: $input) {
                             code
                             status
+                            priority
                         }
                     }
                 `,
@@ -303,6 +304,7 @@ describe('Test Service - Time Tracking Project Functionality', () => {
                     input: {
                         code: "UNITTEST_1010",
                         status: "CLOSED",
+                        priority: "MEDIUM"
                     }
                 }
             });
@@ -310,6 +312,7 @@ describe('Test Service - Time Tracking Project Functionality', () => {
             assert.ok(updateIssue, `Error during update of the Issue`);
             assert.equal(updateIssue.code, 'UNITTEST_1010', `Issue code error`);
             assert.equal(updateIssue.status, 'CLOSED', `Issue status error`);
+            assert.equal(updateIssue.priority, 'MEDIUM', `Issue priority error`);
 
         });
 

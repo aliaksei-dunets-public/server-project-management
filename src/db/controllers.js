@@ -91,6 +91,10 @@ class ControllerBase {
         return query;
     }
 
+    _sortOptions() {
+        return { };
+    }
+
     getParentModelId() {
         return FIELDS.id;
     }
@@ -130,7 +134,7 @@ class ControllerBase {
 
     getAll(query) {
         try {
-            return this.model.find(this._whereOptions(query));
+            return this.model.find(this._whereOptions(query)).sort(this._sortOptions());
         } catch (error) {
             console.error(`Error during getAll - ${error}`);
             return null;
@@ -139,7 +143,7 @@ class ControllerBase {
 
     getAllByParent(id) {
         try {
-            return this.model.find({ [this.getParentModelId()]: id });
+            return this.model.find({ [this.getParentModelId()]: id }).sort(this._sortOptions());
         } catch (error) {
             console.error(`Error during getAllByParent - ${error}`);
             return null;
@@ -148,7 +152,7 @@ class ControllerBase {
 
     getAllByRoot(id) {
         try {
-            return this.model.find({ [this.getRootModelId()]: id });
+            return this.model.find({ [this.getRootModelId()]: id }).sort(this._sortOptions());
         } catch (error) {
             console.error(`Error during getAllByRoot - ${error}`);
             return null;
@@ -157,7 +161,7 @@ class ControllerBase {
 
     getByArrayIds(uniqIds) {
         if (uniqIds.length === 0) return [];
-        return this.model.find({ [FIELDS.id]: { $in: uniqIds } });
+        return this.model.find({ [FIELDS.id]: { $in: uniqIds } }).sort(this._sortOptions());
     }
 
     createOne(body) {
@@ -267,12 +271,20 @@ class ControllerProject extends ControllerBase {
     constructor() {
         super(db.ProjectModel);
     }
+
+    _sortOptions() {
+        return { status: 1, name: 1 };
+    }
 }
 
 class ControllerIssue extends ControllerBase {
 
     constructor() {
         super(db.IssueModel);
+    }
+
+    _sortOptions() {
+        return { priority: 1, status: -1, code: 1 };
     }
 
     getParentModelId() {
@@ -284,6 +296,10 @@ class ControllerTimelog extends ControllerBase {
 
     constructor() {
         super(db.TimelogModel);
+    }
+
+    _sortOptions() {
+        return { dateLog: -1 };
     }
 
     _parseStartDate(date) {

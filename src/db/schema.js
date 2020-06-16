@@ -4,7 +4,7 @@ const mongoose = require('../libs/mongoose');
 // const util = require('util');
 
 const ProjectModel = require('./schema/project');
-const NumberRangeModel = require('./schema/numberRange');
+const IssueModel = require('./schema/issue');
 
 const Schema = mongoose.Schema;
 
@@ -24,26 +24,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     }
-}, { timestamps: true });
-
-// const projectSchema = new Schema({
-//     code: { type: String, unique: true, required: true, uppercase: true },
-//     name: { type: String, required: true },
-//     descr: { type: String },
-//     status: { type: String, default: 'INACTIVE' },          // ACTIVE, INACTIVE, OBSOLETE
-//     external_code: { type: String },
-//     external_url: { type: String },
-// }, { timestamps: true });
-
-const issueSchema = new Schema({
-    project_id: { type: String, required: true, index: true },
-    code: { type: String, uppercase: true },
-    codeId: { type: Number },
-    summary: { type: String, required: true },
-    descr: { type: String },
-    status: { type: String, default: 'NEW' },               // NEW, PROGRESS, CLOSED
-    external_code: { type: String },
-    external_url: { type: String },
 }, { timestamps: true });
 
 const timelogSchema = new Schema({
@@ -70,25 +50,6 @@ userSchema.virtual('password')
 userSchema.methods.checkPassword = function (password) {
     return this.encryptPassword(password) === this.hashedPassword;
 }
-
-issueSchema.pre('save', async function (next) {
-    try {
-        if (this.isNew) {
-            const project = await ProjectModel.findById(this.project_id);
-            if (project) {
-
-                const count = await NumberRangeModel.nextNumber(this.project_id);
-
-                // const count = await util.promisify(this.nextCount)();
-                this.code = `${project.code}-${count}`;
-                this.external_url = project.external_url;
-            }
-        }
-        next();
-    } catch (error) {
-        // TO DO error
-    }
-});
 
 // Projection Block
 
@@ -197,23 +158,10 @@ taskSchema.pre('save', async function () {
 //     item.deviation = standardDeviation(item.best, item.worst);
 // });
 
-// const ProjectModel = mongoose.model('Project', projectSchema);
-
-// issueSchema.plugin(autoIncrement.plugin, {
-//     model: 'Issue',
-//     field: 'codeId'
-// });
-const IssueModel = mongoose.model('Issue', issueSchema);
-// const TimelogModel = mongoose.model('Timelog', timelogSchema);
-// const ProjectionModel = mongoose.model('Projection', projectionSchema);
-// const VersionModel = mongoose.model('Version', versionSchema);
-// const StoryModel = mongoose.model('Story', storySchema);
-// const TaskModel = mongoose.model('Task', taskSchema);
-
 module.exports = {
     UserModel: mongoose.model('User', userSchema),
-    ProjectModel, //: mongoose.model('Project', projectSchema),
-    IssueModel, //: mongoose.model('Issue', issueSchema),
+    ProjectModel, 
+    IssueModel, 
     TimelogModel: mongoose.model('Timelog', timelogSchema),
     ProjectionModel: mongoose.model('Projection', projectionSchema),
     VersionModel: mongoose.model('Version', versionSchema),

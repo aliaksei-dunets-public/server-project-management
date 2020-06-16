@@ -1,6 +1,15 @@
 const { FIELDS, MODELS } = require('../db/controllers');
 
 module.exports = {
+
+    // Enum
+    IssuePriority: {
+        LOW: 4,
+        MEDIUM: 3,
+        HIGH: 2,
+        CRITICAL: 1,
+    },
+
     // Queries
     Query: {
         // Project
