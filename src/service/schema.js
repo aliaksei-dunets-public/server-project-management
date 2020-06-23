@@ -24,6 +24,14 @@ const typeDefs = gql`
         CLOSED
     }
 
+    ## 1 - Critical, 2 - High, 3 - Medium, 4 - Low
+    enum IssuePriority {
+        LOW
+        MEDIUM
+        HIGH
+        CRITICAL
+    }
+
     enum ProjectionStatus {
         INACTIVE
         ACTIVE        
@@ -71,6 +79,7 @@ const typeDefs = gql`
         summary: String
         descr: String
         status: IssueStatus
+        priority: IssuePriority
         external_code: String
         external_url: String
         createdAt: DateTime
@@ -216,6 +225,7 @@ const typeDefs = gql`
         summary: String!
         descr: String
         status: IssueStatus
+        priority: IssuePriority
         external_code: String
         external_url: String
     }
@@ -226,6 +236,7 @@ const typeDefs = gql`
         summary: String
         descr: String
         status: IssueStatus
+        priority: IssuePriority
         external_code: String
         external_url: String
     }
@@ -327,7 +338,7 @@ const typeDefs = gql`
         projects(status: ProjectStatus): [Project]
 
         issue(id: ID!): Issue
-        issues(status: IssueStatus, project_id: String): [Issue]
+        issues(statuses: [IssueStatus], project_id: String): [Issue]
         
         timelog(id: ID!): Timelog
         timelogs(project_id: String, issue_id: String, startDate: Date, endDate: Date): [Timelog]        

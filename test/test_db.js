@@ -45,6 +45,7 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
 
             assert.ok(issue, `Error during creation of a new Issue`);
             assert.equal(issue.code, 'TST01-1', `Issue code error`);
+            assert.equal(issue.priority, 4, `Issue priority error`);
         });
 
         it('Create a Timelog', async () => {
@@ -114,6 +115,7 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
             assert.ok(issue, `Error during creation of a new Issue`);
 
             const body = {
+                priority: 2,
                 external_code: 'TST0011',
             };
 
@@ -121,6 +123,7 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
 
             assert.ok(instance, `Error during update of the Issue`);
             assert.equal(instance.external_code, 'TST0011', `Issue external code error`);
+            assert.equal(instance.priority, 2, `Issue priority error`);
         });
 
         it('Update the Timelog', async () => {
