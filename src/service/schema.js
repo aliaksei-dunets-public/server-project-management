@@ -338,7 +338,7 @@ const typeDefs = gql`
         projects(status: ProjectStatus): [Project]
 
         issue(id: ID!): Issue
-        issues(status: IssueStatus, project_id: String): [Issue]
+        issues(statuses: [IssueStatus], project_id: String): [Issue]
         
         timelog(id: ID!): Timelog
         timelogs(project_id: String, issue_id: String, startDate: Date, endDate: Date): [Timelog]        

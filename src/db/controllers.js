@@ -92,7 +92,7 @@ class ControllerBase {
     }
 
     _sortOptions() {
-        return { };
+        return {};
     }
 
     getParentModelId() {
@@ -284,7 +284,18 @@ class ControllerIssue extends ControllerBase {
     }
 
     _sortOptions() {
-        return { priority: 1, status: -1, code: 1 };
+        return { status: -1, priority: 1, code: 1 };
+    }
+
+    _whereOptions(query) {
+
+        let whereOption = {};
+
+        if (!query) return whereOption;
+
+        if (query.statuses) whereOption.status = { $in: query.statuses };
+
+        return whereOption;
     }
 
     getParentModelId() {
