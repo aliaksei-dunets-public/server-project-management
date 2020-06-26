@@ -17,10 +17,13 @@ const typeDefs = gql`
         ACTIVE        
         OBSOLETE
     }
-
+    
+    ## 10 - PROGRESS, 20 - NEW, 30 - HOLD, 40 - READY, 50 - CLOSED
     enum IssueStatus {
         NEW
         PROGRESS
+        HOLD
+        READY
         CLOSED
     }
 

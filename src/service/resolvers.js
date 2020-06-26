@@ -10,6 +10,14 @@ module.exports = {
         CRITICAL: 1,
     },
 
+    IssueStatus: {
+        NEW: 20,
+        PROGRESS: 10,
+        HOLD: 30,
+        READY: 40,
+        CLOSED: 50
+    },
+
     // Queries
     Query: {
         // Project

@@ -273,7 +273,7 @@ class ControllerProject extends ControllerBase {
     }
 
     _sortOptions() {
-        return { status: 1, name: 1 };
+        return { status: 1, code: 1 };
     }
 }
 
@@ -284,7 +284,7 @@ class ControllerIssue extends ControllerBase {
     }
 
     _sortOptions() {
-        return { status: -1, priority: 1, code: 1 };
+        return { status: 1, priority: 1, code: 1 };
     }
 
     _whereOptions(query) {
