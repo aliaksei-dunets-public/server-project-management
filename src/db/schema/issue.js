@@ -8,7 +8,7 @@ const issueSchema = new mongoose.Schema({
     codeId: { type: Number },
     summary: { type: String, required: true },
     descr: { type: String },
-    status: { type: String, default: 'NEW' },               // NEW, PROGRESS, CLOSED
+    status: { type: Number, default: 20 },                  // 10 - PROGRESS, 20 - NEW, 30 - HOLD, 40 - READY, 50 - CLOSED
     priority: { type: Number, default: 4 },                 // 1 - Critical, 2 - High, 3 - Medium, 4 - Low
     //type: { type: String, default: 'TASK' },                // ISSUE, BUG
     external_code: { type: String },
