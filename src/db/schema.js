@@ -5,6 +5,7 @@ const mongoose = require('../libs/mongoose');
 
 const ProjectModel = require('./schema/project');
 const IssueModel = require('./schema/issue');
+const SubIssueModel = require('./schema/subIssue');
 
 const Schema = mongoose.Schema;
 
@@ -160,8 +161,9 @@ taskSchema.pre('save', async function () {
 
 module.exports = {
     UserModel: mongoose.model('User', userSchema),
-    ProjectModel, 
-    IssueModel, 
+    ProjectModel,
+    IssueModel,
+    SubIssueModel,
     TimelogModel: mongoose.model('Timelog', timelogSchema),
     ProjectionModel: mongoose.model('Projection', projectionSchema),
     VersionModel: mongoose.model('Version', versionSchema),

@@ -30,11 +30,19 @@ module.exports = {
         },
         // Issue
         issue: (root, { id }, { dataSources }) => {
-            if (!id) throw new Error(`Error during issue query`);
+            if (!id) throw new Error(`Error during SubIssue query`);
             return dataSources.factory.getInstance(MODELS.issue).getById(id);
         },
         issues: (root, params, { dataSources }) => {
             return dataSources.factory.getInstance(MODELS.issue).getAll(params);
+        },
+        // SubIssue
+        subIssue: (root, { id }, { dataSources }) => {
+            if (!id) throw new Error(`Error during issue query`);
+            return dataSources.factory.getInstance(MODELS.subIssue).getById(id);
+        },
+        subIssues: (root, params, { dataSources }) => {
+            return dataSources.factory.getInstance(MODELS.subIssue).getAll(params);
         },
         // Timelog
         timelog: (root, { id }, { dataSources }) => {
@@ -131,6 +139,7 @@ module.exports = {
 
             if (deleteChild) {
                 await factory.getInstance(MODELS.timelog).deleteByRootId(id);
+                await factory.getInstance(MODELS.subIssue).deleteByRootId(id);
                 await factory.getInstance(MODELS.issue).deleteByParentId(id);
             }
             return factory.getInstance(MODELS.project).deleteOne(id);
@@ -151,9 +160,23 @@ module.exports = {
 
             if (deleteChild) {
                 await factory.getInstance(MODELS.timelog).deleteByParentId(id);
+                await factory.getInstance(MODELS.subIssue).deleteByParentId(id);
             }
 
             return factory.getInstance(MODELS.issue).deleteOne(id);
+        },
+        // SubIssue
+        createSubIssue: (root, { input }, { dataSources }) => {
+            if (!input) throw new Error(`Error during createSubIssue mutation`);
+            return dataSources.factory.getInstance(MODELS.subIssue).createOne(input);
+        },
+        updateSubIssue: (root, { id, input }, { dataSources }) => {
+            if (!id || !input) throw new Error(`Error during updateSubIssue mutation`);
+            return dataSources.factory.getInstance(MODELS.subIssue).update(id, input);
+        },
+        deleteSubIssue: async (root, { id }, { dataSources }) => {
+            if (!id) throw new Error(`Error during deleteSubIssue mutation`);
+            return dataSources.factory.getInstance(MODELS.subIssue).deleteOne(id);
         },
         // Timelog
         createTimelog: (root, { input }, { dataSources }) => {
@@ -262,6 +285,10 @@ module.exports = {
         },
     },
     Issue: {
+        subIssues: (root, params, { dataSources }) => {
+            if (!root.id) throw new Error(`Error during IssueDetail-subIssues query`);
+            return dataSources.factory.getInstance(MODELS.subIssue).getAllByParent(root.id);
+        },
         timelogs: (root, params, { dataSources }) => {
             if (!root.id) throw new Error(`Error during IssueDetail-timelogs query`);
             return dataSources.factory.getInstance(MODELS.timelog).getAllByParent(root.id);

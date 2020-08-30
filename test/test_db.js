@@ -8,10 +8,12 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
 
     let project;
     let issue;
+    let subIssue;
     let timelog;
     
     const projectController = factory.getInstance(MODELS.project);
     const issueController = factory.getInstance(MODELS.issue);
+    const subIssueController = factory.getInstance(MODELS.subIssue);
     const timelogController = factory.getInstance(MODELS.timelog);
 
     describe('Create instances of the Models', () => {
@@ -46,6 +48,20 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
             assert.ok(issue, `Error during creation of a new Issue`);
             assert.equal(issue.code, 'TST01-1', `Issue code error`);
             assert.equal(issue.priority, 4, `Issue priority error`);
+        });
+
+        it('Create a SubIssue', async () => {
+            const body = {
+                project_id: project._id,
+                issue_id: issue._id,
+                summary: 'Test SubIssue 001',
+                descr: 'My Test SubIssue 001',
+            };
+
+            subIssue = await subIssueController.createOne(body);
+
+            assert.ok(subIssue, `Error during creation of a new SubIssue`);
+            assert.equal(subIssue.priority, 4, `SubIssue priority error`);
         });
 
         it('Create a Timelog', async () => {
@@ -126,6 +142,19 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
             assert.equal(instance.priority, 2, `Issue priority error`);
         });
 
+        it('Update the SubIssue', async () => {
+            assert.ok(subIssue, `Error during creation of a new SubIssue`);
+
+            const body = {
+                priority: 2,
+            };
+
+            const instance = await subIssueController.update(subIssue._id, body);
+
+            assert.ok(instance, `Error during update of the SubIssue`);
+            assert.equal(instance.priority, 2, `SubIssue priority error`);
+        });
+
         it('Update the Timelog', async () => {
             assert.ok(timelog, `Error during creation of a new Timelog`);
 
@@ -150,6 +179,11 @@ describe('Test DB Model - Time Tracking Project Functionality', () => {
         it('Delete the Issue', async () => {
             assert.ok(issue, `Error during creation of a new Issue`);
             assert.ok(await issueController.deleteOne(issue._id), `Error during <Delete the Issue> of the Issue`);
+        });
+
+        it('Delete the SubIssue', async () => {
+            assert.ok(subIssue, `Error during creation of a new SubIssue`);
+            assert.ok(await subIssueController.deleteOne(subIssue._id), `Error during <Delete the SubIssue> of the SubIssue`);
         });
 
         it('Delete the Timelog', async () => {
