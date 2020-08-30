@@ -88,6 +88,19 @@ const typeDefs = gql`
         createdAt: DateTime
         updatedAt: DateTime
         timelogs: [Timelog]
+        subIssues: [SubIssue]
+    }
+
+    type SubIssue {
+        id: ID
+        project_id: ID
+        issue_id: ID
+        summary: String
+        descr: String
+        status: IssueStatus
+        priority: IssuePriority
+        createdAt: DateTime
+        updatedAt: DateTime
     }
 
     type Timelog {
@@ -244,6 +257,22 @@ const typeDefs = gql`
         external_url: String
     }
 
+    input SubIssueCreate {
+        project_id: ID!
+        issue_id: ID!
+        summary: String!
+        descr: String
+        status: IssueStatus
+        priority: IssuePriority
+    }
+
+    input SubIssueEdit {
+        summary: String
+        descr: String
+        status: IssueStatus
+        priority: IssuePriority
+    }
+
     input TimelogCreate {
         project_id: ID!
         issue_id: ID!
@@ -342,6 +371,9 @@ const typeDefs = gql`
 
         issue(id: ID!): Issue
         issues(statuses: [IssueStatus], project_id: String): [Issue]
+
+        subIssue(id: ID!): SubIssue
+        subIssues(issue_id: ID): [SubIssue]
         
         timelog(id: ID!): Timelog
         timelogs(project_id: String, issue_id: String, startDate: Date, endDate: Date): [Timelog]        
@@ -370,6 +402,10 @@ const typeDefs = gql`
         createIssue(input:IssueCreate): Issue
         updateIssue(id:ID!, input:IssueEdit): Issue
         deleteIssue(id:ID!, deleteChild:Boolean): Issue
+
+        createSubIssue(input:SubIssueCreate): SubIssue
+        updateSubIssue(id:ID!, input:SubIssueEdit): SubIssue
+        deleteSubIssue(id:ID!): SubIssue
 
         createTimelog(input:TimelogCreate): Timelog
         createMultiTimelogs(input:[TimelogCreate]): [Timelog]

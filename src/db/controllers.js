@@ -5,6 +5,7 @@ const MODELS = {
     user: 'User',
     project: 'Project',
     issue: 'Issue',
+    subIssue: 'SubIssue',
     timelog: 'Timelog',
     projection: 'Projection',
     version: 'Version',
@@ -51,6 +52,9 @@ class ControllerFactory {
                 break;
             case MODELS.issue:
                 controller = new ControllerIssue();
+                break;
+            case MODELS.subIssue:
+                controller = new ControllerSubIssue();
                 break;
             case MODELS.timelog:
                 controller = new ControllerTimelog();
@@ -299,6 +303,25 @@ class ControllerIssue extends ControllerBase {
     }
 
     getParentModelId() {
+        return FIELDS.project_id;
+    }
+}
+
+class ControllerSubIssue extends ControllerBase {
+
+    constructor() {
+        super(db.SubIssueModel);
+    }
+
+    _sortOptions() {
+        return { status: 1, priority: 1 };
+    }
+
+    getParentModelId() {
+        return FIELDS.issue_id;
+    }
+
+    getRootModelId() {
         return FIELDS.project_id;
     }
 }
