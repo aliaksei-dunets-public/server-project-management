@@ -1,4 +1,5 @@
 const { FIELDS, MODELS } = require('../db/controllers');
+const pdfCreator = require('../libs/pdfCreator');
 
 module.exports = {
 
@@ -81,6 +82,10 @@ module.exports = {
                 timelogs
             };
         },
+        report: (root, params, { dataSources }) => {
+            return pdfCreator();
+        },
+
         // Projection
         projection: (root, { id }, { dataSources }) => {
             if (!id) throw new Error(`Error during projection query`);

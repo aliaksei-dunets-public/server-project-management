@@ -120,6 +120,10 @@ const typeDefs = gql`
         timelogs: [Timelog]
     }
 
+    type Report {
+        filename: String
+    }
+
     type Projection {
         id: ID
         code: String
@@ -378,6 +382,8 @@ const typeDefs = gql`
         timelog(id: ID!): Timelog
         timelogs(project_id: String, issue_id: String, startDate: Date, endDate: Date): [Timelog]        
         timesheet(startDate: Date, endDate: Date):Timesheet
+
+        report(project_id: String, issue_id: String, startDate: Date, endDate: Date): Report
 
         projection(id: ID!): ProjectionDetail
         projections(status: ProjectionStatus): [Projection]
