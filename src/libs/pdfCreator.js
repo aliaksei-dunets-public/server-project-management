@@ -2,9 +2,9 @@ const pdf = require("pdf-creator-node");
 const path = require('path');
 const fs = require('fs');
 
-module.exports = () => {
+module.exports = async (userId) => {
     // Read HTML Template
-    var htmlTemplate = fs.readFileSync(path.join(__dirname, '../public/pdf_template.html'), 'utf8');
+    var htmlTemplate = fs.readFileSync(path.join(__dirname, '../../public/pdf_template.html'), 'utf8');
 
     var options = {
         format: "A3",
@@ -45,10 +45,13 @@ module.exports = () => {
         data: {
             users: users
         },
-        path: path.join(__dirname, '../public/output.pdf')
+        path: path.join(__dirname, '../../public/output.pdf')
     };
 
-    return pdf.create(document, options);
+    const file = await pdf.create(document, options);
 
+    return {
+        filename: path.basename(file.filename)
+    }
 }
 

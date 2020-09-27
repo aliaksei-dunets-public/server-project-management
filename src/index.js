@@ -1,6 +1,11 @@
 const config = require('./config')[process.env.NODE_ENV || 'development'];
 
-const { ApolloServer } = require('apollo-server');
+// const { ApolloServer } = require('apollo-server');
+const express = require('express');
+var path = require('path');
+const { ApolloServer } = require('apollo-server-express');
+
+const app = express();
 
 const typeDefs = require('./service/schema');
 const resolvers = require('./service/resolvers');
@@ -24,8 +29,10 @@ const server = new ApolloServer({
     // plugins: [plugins],
 });
 
-server
-    .listen({ port: config.PORT })
-    .then(({ url }) => {
-        console.log(`Server running at ${url}`)
-    });
+server.applyMiddleware({ app, path: '/graphql' });
+
+app.use('/static', express.static(path.join(__dirname, '../public')));
+
+app.listen({ port: config.PORT }, () => {
+    console.log(`Server running on PORT: ${config.PORT}`)
+});
