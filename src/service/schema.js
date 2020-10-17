@@ -110,6 +110,7 @@ const typeDefs = gql`
         dateLog: DateTime
         valueLog: Float
         descr: String
+        paidUp: Boolean 
         createdAt: DateTime
         updatedAt: DateTime
     }
@@ -118,6 +119,10 @@ const typeDefs = gql`
         projects: [Project]
         issues: [Issue]
         timelogs: [Timelog]
+    }
+
+    type Report {
+        filename: String
     }
 
     type Projection {
@@ -279,6 +284,7 @@ const typeDefs = gql`
         dateLog: Date
         valueLog: Float!
         descr: String
+        paidUp: Boolean
     }
 
     input TimelogEdit {
@@ -287,6 +293,7 @@ const typeDefs = gql`
         dateLog: Date
         valueLog: Float
         descr: String
+        paidUp: Boolean
     }
 
     input ProjectionCreate {
@@ -377,7 +384,9 @@ const typeDefs = gql`
         
         timelog(id: ID!): Timelog
         timelogs(project_id: String, issue_id: String, startDate: Date, endDate: Date): [Timelog]        
-        timesheet(startDate: Date, endDate: Date):Timesheet
+        timesheet(startDate: Date, endDate: Date, project_id: String):Timesheet
+
+        report(project_id: String, issue_id: String, startDate: Date, endDate: Date): Report
 
         projection(id: ID!): ProjectionDetail
         projections(status: ProjectionStatus): [Projection]
