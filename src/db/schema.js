@@ -33,6 +33,7 @@ const timelogSchema = new Schema({
     dateLog: { type: Date, default: Date.now },
     valueLog: { type: Number },
     descr: { type: String },
+    paidUp: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // Schema DB Logic
