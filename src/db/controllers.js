@@ -136,9 +136,9 @@ class ControllerBase {
         }
     }
 
-    getAll(query) {
+    getAll(query, sortOptions) {
         try {
-            return this.model.find(this._whereOptions(query)).sort(this._sortOptions());
+            return this.model.find(this._whereOptions(query)).sort(sortOptions ? sortOptions : this._sortOptions());
         } catch (error) {
             console.error(`Error during getAll - ${error}`);
             return null;
