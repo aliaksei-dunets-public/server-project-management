@@ -82,8 +82,35 @@ module.exports = {
                 timelogs
             };
         },
-        report: (root, params, { dataSources }) => {
-            return pdfCreator();
+        report: async (root, params, { dataSources, user }) => {
+
+            let projects = [],
+                issues = [],
+                timelogs = [];
+
+            const factory = dataSources.factory;
+            const instanceTimelog = factory.getInstance(MODELS.timelog);
+            timelogs = await instanceTimelog.getAll(params, { dateLog: 1 });
+
+            if (!timelogs) return {};
+
+            const issueUniqIds = instanceTimelog.getUniqIds(FIELDS.issue_id, timelogs);
+            if (issueUniqIds) {
+                issues = await factory.getInstance(MODELS.issue).getByArrayIds(issueUniqIds);
+            }
+
+            const projectUniqIds = instanceTimelog.getUniqIds(FIELDS.project_id, timelogs);
+            if (projectUniqIds) {
+                projects = await factory.getInstance(MODELS.project).getByArrayIds(projectUniqIds);
+            }
+
+            const timesheet = {
+                projects,
+                issues,
+                timelogs
+            };
+
+            return pdfCreator(user.id, params, timesheet);
         },
 
         // Projection

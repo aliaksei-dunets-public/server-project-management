@@ -386,7 +386,7 @@ const typeDefs = gql`
         timelogs(project_id: String, issue_id: String, startDate: Date, endDate: Date): [Timelog]        
         timesheet(startDate: Date, endDate: Date, project_id: String):Timesheet
 
-        report(project_id: String, issue_id: String, startDate: Date, endDate: Date): Report
+        report(startDate: Date, endDate: Date, project_id: String): Report
 
         projection(id: ID!): ProjectionDetail
         projections(status: ProjectionStatus): [Projection]

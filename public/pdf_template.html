@@ -1,17 +1,50 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <mate charest="utf-8" />
-        <title>Hello world!</title>
-    </head>
-    <body>
-        <h1>User List</h1>
-        <ul>
-            {{#each users}}
-            <li>Name: {{this.name}}</li>
-            <li>Age: {{this.age}}</li>
-            <br>
+
+<head>
+    <mate charest="utf-8" />
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th,
+        td {
+            padding: 5px;
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{title}}</h1>
+
+    {{#each projects}}
+    <br>
+    <h3>{{this.name}} - {{this.descr}} ({{this.code}})</h3>
+    <table style="width:100%">
+        <tr>
+            <th>Issue</th>
+            <th>Date</th>
+            <th>Time, h</th>
+            <th>Description</th>
+        </tr>
+        {{#each this.times}}
+        <tr>
+            <td>{{this.issue_descr}}</td>
+            <td>{{this.dateLog}}</td>
+            <td>{{this.valueLog}}</td>
+            <td>{{this.descr}}</td>
+        </tr>
         {{/each}}
-        </ul>
-    </body>
+        <tr>
+            <td><b>Total</b></td>
+            <td colspan="3"><b>{{this.totalTime}}</b></td>
+        </tr>
+    </table>
+    {{/each}}
+</body>
+
 </html>

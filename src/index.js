@@ -20,8 +20,9 @@ const server = new ApolloServer({
     resolvers,
     context: async ({ req }) => {
         // simple auth check on every request
-        const auth = req.headers && req.headers.Authorization || '';
-        return await factory.getInstance(MODELS.user).checkToken(auth);
+        const auth = req.headers && req.headers.authorization || '';
+        const user = await factory.getInstance(MODELS.user).checkToken(auth);
+        return { user }
     },
     dataSources: () => ({ factory }),
     introspection: true,
