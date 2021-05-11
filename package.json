@@ -20,7 +20,7 @@
     "graphql-fields": "^2.0.3",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "^4.0.7",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "mongoose": "^5.9.4",
     "nodemon": "^2.0.2",
