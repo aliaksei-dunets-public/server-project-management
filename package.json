@@ -21,7 +21,7 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "^4.0.7",
     "lodash": "^4.17.19",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.4",
     "nodemon": "^2.0.2",
     "pdf-creator-node": "^1.4.1"
