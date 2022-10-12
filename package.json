@@ -10,7 +10,7 @@
   "author": "Aliaksei Dunets",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.14.2",
+    "apollo-server": "^2.25.4",
     "apollo-server-express": "^2.18.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
